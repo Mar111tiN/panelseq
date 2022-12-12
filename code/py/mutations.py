@@ -55,18 +55,23 @@ def merge_filter_lists(excel_file="", config={}, merge_raw=False):
     
     
     data_path = config['paths']['data_path']
-    sample_df = get_samples(data_path).loc[:, ['raw','all', 'basic', 'filter1', 'loose', 'moderate', 'strict', 'dropped']]
+    stringencies = ['all', 'basic', 'filter1', 'loose', 'moderate', 'strict', 'dropped']
+    if merge_raw:
+        stringencies += ["raw"]
+    sample_df = get_samples(data_path).loc[:, stringencies]
     show_output(f"Reading file list from folder {data_path}")
     base_cols = ['Chr', 'Start', 'End', 'Ref', 'Alt']
     dfs = {}
     for sample in sample_df.index:
-
-        raw_df = read_mutlist(sample, sample_df, stringency="raw")
-        cols = base_cols + [col for col in raw_df.columns if "cosmic" in col]
-        raw_df = raw_df.loc[:, cols]
+        if merge_raw:
+            raw_df = read_mutlist(sample, sample_df, stringency="raw")
+            cols = base_cols + [col for col in raw_df.columns if "cosmic" in col]
+            raw_df = raw_df.loc[:, cols]
 
         # go through all the existing stringencies
-        for t in sample_df.drop("raw", axis=1).loc[sample,:].dropna().index:
+        _index = sample_df.drop("raw", axis=1).loc[sample,:].dropna().index if merge_raw else sample_df.loc[sample,:].dropna().index
+
+        for t in _index:
             mut_df = read_mutlist(sample, sample_df, stringency=t).drop_duplicates()
             if mut_df.empty:
                 continue
@@ -81,9 +86,9 @@ def merge_filter_lists(excel_file="", config={}, merge_raw=False):
            'AAChange_ensGene34', 'map30_0', 'map50_0', 'map75_1', 'map100_2',
            'GCratio', 'isCandidate', 'ChipID', 'ChipPub', 'ChipFreq', 'cytoBand',
            'somaticP', 'variantP', 'Tdepth', 'TVAF', 'Ndepth', 'NVAF',
-           'FisherScore', 'EBscore', 'PONAltSum', 'PONRatio', 'PONAltNonZeros',
+           'FisherScore', 'EBscore','PON+', 'PON-','PONAltSum', 'PONRatio', 'PONAltNonZeros',
            'TR1', 'TR1+', 'TR2', 'TR2+', 'NR1', 'NR1+', 'NR2', 'NR2+', 'ClinScore',
-           'cosmic70_ID', 'cosmic70_type', 'cosmic70_score', 'cosmic95_ID', 'cosmic95_count', 'cosmic95_type', 'icgc29_Affected',
+           'cosmic97_ID', 'cosmic97_count', 'cosmic97_type', 'icgc29_Affected',
            'clinvar_score', 'CLNALLELEID', 'CLNDN', 'CLNSIG', 'gnomAD_exome_ALL',
            'dbSNP154_ID', 'dbSNP154_AltFreq', 'SIFT_pred', 'Polyphen2_HDIV_pred',
            'Polyphen2_HVAR_pred', 'LRT_pred', 'MutationTaster_pred',
@@ -97,9 +102,9 @@ def merge_filter_lists(excel_file="", config={}, merge_raw=False):
     # write to file
     if excel_file:
         excel_path = os.path.join(config['paths']['output_path'], excel_file)
-        show_output(f"Writing to excel_path {excel_file}")
+        show_output(f"Writing to excel_path {excel_path}")
         with pd.ExcelWriter(excel_path) as writer:
-            for t in sample_df.drop("raw", axis=1).loc[sample,:].dropna().index:
+            for t in _index:
                 dfs[t] = pd.concat(dfs[t]).sort_values(['Sample', 'Chr', 'Start'])
                 dfs[t].to_excel(writer, sheet_name=t, index=False)
         show_output("Finished!", color="success")
