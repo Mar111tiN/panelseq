@@ -1,15 +1,15 @@
 ---
 paths: 
-    base_path: ../..  # abs or relative to HOME
+    base_path: <repopath>  # abs or relative to HOME
     code_core:  # paths to external python code base
-        - Sites/Bio/panelseq/code/py  # abs or relative to HOME
+        - <repopath>/code/py  # abs or relative to HOME
     output_path: testoutput # relative to base_path
-    OverviewSeq_excel: ../../testdata/testSamplesSequencing.xlsx # abs or relative to HOME
+    OverviewSeq_excel: <repopath>/testdata/testSamplesSequencing.xlsx # abs or relative to HOME
 Run:
-    InvestigatorName: Martin Szyska
-    ProjectName: LungPanelSequencing
-    ExperimentName: 221116-LungPanel_1
-    Date: 16/11/22
+    InvestigatorName: Jane Doe
+    ProjectName: Generic Sequencing
+    ExperimentName: 222222-Seq_1
+    Date: 22/22/22
     Workflow: GenerateFASTQ     # GenerateFASTQ for direct demultiplexing
     Library Prep Kit: Custom
     Chemistry: Default
