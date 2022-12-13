@@ -1,0 +1,19 @@
+[Header]
+InvestigatorName,Jane Doe
+ProjectName,Generic Sequencing
+ExperimentName,222222-Seq_1
+Date,22/22/22
+Workflow,GenerateFASTQ
+Library Prep Kit,Custom
+Chemistry,Default
+
+[Reads]
+151
+151
+
+[Data]
+Sample_ID,Sample_Name,Index,Index_ID
+9T,9T,GTCTGTCA,A01
+9H,9H,TGAAGAGA,B01
+9O,9O,TTCACGCA,C01
+12H,12H,ACACAGAA,H01

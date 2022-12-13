@@ -4,6 +4,8 @@ used for running Miniseq/MiSeq-sequencing runs. The generated sample sheet has t
 ## Setup
 + first, go to the desired folder and download the code from github:
     `$ git clone https://github.com/Mar111tiN/panelseq.git && cd panelseq`
++ next, you also have to download the sceleton code that provides basic functionality to all my python tools: `git clone https://github.com/Mar111tiN/projectsceleton.git`
+    * the path to the `projectsceleton` folder has to be passed in the notebook boilerplate for essential functions to be usable (config loading etc.)
 + guidance for setting up a jupyter notebook can be received from Samira, Sarah or Lena
 + the recommended way is via miniconda/mambaforge installation followed by creating the proper environment
 + you can create a jupyter notebook environment via conda from the `py-env.yml` in the env-folder
