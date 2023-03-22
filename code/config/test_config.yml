@@ -1,10 +1,11 @@
 ---
+code: 
+    py_core:
+        - Sites/Bio/panelseq/code/py  # abs or relative to HOME
 paths: 
-    base_path: Sites/panelseq  # abs or relative to HOME
-    code_core:  # paths to external python code base
-        - Sites/panelseq/code/py  # abs or relative to HOME
+    base_path: Sites/Bio/panelseq  # abs or relative to HOME
     output_path: testoutput # relative to base_path
-    OverviewSeq_excel: Sites/panelseq/testdata/testSamplesSequencing.xlsx # abs or relative to HOME
+    OverviewSeq_excel: Sites/Bio/panelseq/testdata/testSamplesSequencing.xlsx # abs or relative to HOME
 Run:
     InvestigatorName: Jane Doe
     ProjectName: Generic Sequencing

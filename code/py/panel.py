@@ -77,14 +77,13 @@ def read_agilent(sample_excel=""):
             return (None,None)
 
     status_df = pd.read_excel(sample_excel, sheet_name="Status", skiprows=1).dropna(axis=0, how="all").loc[lambda r:r['SampleInfo'].notna(), :]
-    status_df = status_df.loc[lambda x: (x['Sample'].notna()) & (x['SeqStatus'] == 1) & (x['Library'] == 3), ['Sample', 'Library', 'SeqStatus']]
-    
+    status_df = status_df.loc[lambda x: (x['Sample'].notna()) & (x['SeqStatus'] == 1) & (x['Library'] > 2), ['Sample', 'Library', 'SeqStatus']]
     libs_df = pd.read_excel(sample_excel, sheet_name="Libraries", skiprows=1).dropna(axis=0, how="all").loc[lambda r:r['SampleInfo'].notna(), :]
     libs_df = libs_df.loc[lambda x: x['Sample'].notna(), ['Sample', 'i7-Index ID','i7-Index']].merge(status_df)
     libs_df = libs_df.loc[:, ['Sample', 'Sample', 'i7-Index', 'i7-Index ID']]
     libs_df.columns = ['Sample_ID', 'Sample_Name', "Index", "Index_ID"]
     libs_df['Index'] = libs_df['Index'].str.replace(" ", "")    
-    return libs_df
+    return libs_df.dropna(subset='Index')
     
 
 def make_MiniSeq_sampleSheet(sample_sheet_name="sample_sheet", config={}, usePoolingList=False):
@@ -102,7 +101,6 @@ def make_MiniSeq_sampleSheet(sample_sheet_name="sample_sheet", config={}, usePoo
 
     else:
         lib_df = read_agilent(sample_excel)
-   
     
     if not len(lib_df):
         show_output("No unsequenced libraries found!", color="success")
